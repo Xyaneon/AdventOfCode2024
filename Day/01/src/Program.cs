@@ -1,4 +1,6 @@
-﻿if (args.Length != 1)
+﻿using System.Linq;
+
+if (args.Length != 1)
 {
     Console.Error.WriteLine($"Incorrect number of arguments (expected 1, got {args.Length})");
     Console.Error.WriteLine("Usage: dotnet Day1.exe input-file");
@@ -35,6 +37,13 @@ for (int i = 0; i < leftList.Count; i++) {
     differences.Add(Math.Abs(leftList[i] - rightList[i]));
 }
 
-Console.WriteLine($"{differences.Sum()}");
+int similarityScore = 0;
+
+foreach (int leftListNumber in leftList) {
+    similarityScore += leftListNumber * rightList.Where(x => x == leftListNumber).Count();
+}
+
+Console.WriteLine($"Total distance  : {differences.Sum()}");
+Console.WriteLine($"Similarity score: {similarityScore}");
 
 return 0;
