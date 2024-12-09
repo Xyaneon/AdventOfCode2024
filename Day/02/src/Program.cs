@@ -21,10 +21,11 @@ int safeReportCount = 0;
 
 foreach (string line in lines)
 {
-    List<int> levels = line
+    IReadOnlyList<int> levels = line
         .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
         .Select(int.Parse)
-        .ToList();
+        .ToList()
+        .AsReadOnly();
 
     if (ReportHandler.IsReportSafe(levels))
     {
