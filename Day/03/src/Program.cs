@@ -36,4 +36,22 @@ foreach (var line in lines)
 
 Console.WriteLine($"Sum of multiplications: {sum}");
 
+var sumEnabledSections = 0;
+
+var singleLine = string.Join("", lines).Trim();
+IEnumerable<string> enabledSections = ConditionalParser.ParseEnabledSections(singleLine);
+
+foreach (var section in enabledSections)
+{
+    var matches = mulRegex.Matches(section);
+    foreach (Match match in matches)
+    {
+        var firstOperand = int.Parse(match.Groups[1].Value);
+        var secondOperand = int.Parse(match.Groups[2].Value);
+        sumEnabledSections += firstOperand * secondOperand;
+    }
+}
+
+Console.WriteLine($"Sum of multiplications (enabled sections only): {sumEnabledSections}");
+
 return 0;
