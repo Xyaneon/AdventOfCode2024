@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-if (args.Length != 1)
+﻿if (args.Length != 1)
 {
     Console.Error.WriteLine($"Incorrect number of arguments (expected 1, got {args.Length})");
     Console.Error.WriteLine("Usage: dotnet Day3.exe input-file");
