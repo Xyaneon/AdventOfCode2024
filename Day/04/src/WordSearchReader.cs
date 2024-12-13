@@ -4,7 +4,38 @@ using System.Text;
 
 static class WordSearchReader
 {
-    public static IEnumerable<string> GetAllLinesFromLeftToRight(IReadOnlyList<string> lines)
+    public static int CountOccurrencesOfXmas(IReadOnlyList<string> lines) =>
+        GetAllLinesInEveryDirection(lines)
+            .Select(CountOccurrencesOfXmas)
+            .Sum();
+
+    private static int CountOccurrencesOfXmas(string line)
+    {
+        int count = 0;
+        int startIndex = 0;
+        int foundIndex = line.IndexOf("XMAS", startIndex);
+
+        while (foundIndex != -1)
+        {
+            count++;
+            startIndex = foundIndex + 1;
+            foundIndex = line.IndexOf("XMAS", startIndex);
+        }
+
+        return count;
+    }
+
+    private static IEnumerable<string> GetAllLinesInEveryDirection(IReadOnlyList<string> lines) =>
+        GetAllLinesFromLeftToRight(lines)
+            .Concat(GetAllLinesFromRightToLeft(lines))
+            .Concat(GetAllLinesFromTopToBottom(lines))
+            .Concat(GetAllLinesFromBottomToTop(lines))
+            .Concat(GetAllLinesFromTopLeftToBottomRight(lines))
+            .Concat(GetAllLinesFromBottomRightToTopLeft(lines))
+            .Concat(GetAllLinesFromTopRightToBottomLeft(lines))
+            .Concat(GetAllLinesFromBottomLeftToTopRight(lines));
+
+    private static IEnumerable<string> GetAllLinesFromLeftToRight(IReadOnlyList<string> lines)
     {
         for (int row = 0; row < lines.Count; row++)
         {
@@ -12,7 +43,7 @@ static class WordSearchReader
         }
     }
 
-    public static IEnumerable<string> GetAllLinesFromRightToLeft(IReadOnlyList<string> lines)
+    private static IEnumerable<string> GetAllLinesFromRightToLeft(IReadOnlyList<string> lines)
     {
         for (int row = 0; row < lines.Count; row++)
         {
@@ -20,7 +51,7 @@ static class WordSearchReader
         }
     }
 
-    public static IEnumerable<string> GetAllLinesFromTopToBottom(IReadOnlyList<string> lines)
+    private static IEnumerable<string> GetAllLinesFromTopToBottom(IReadOnlyList<string> lines)
     {
         for (int column = 0; column < lines[0].Length; column++)
         {
@@ -28,7 +59,7 @@ static class WordSearchReader
         }
     }
 
-    public static IEnumerable<string> GetAllLinesFromBottomToTop(IReadOnlyList<string> lines)
+    private static IEnumerable<string> GetAllLinesFromBottomToTop(IReadOnlyList<string> lines)
     {
         for (int column = 0; column < lines[0].Length; column++)
         {
@@ -36,7 +67,7 @@ static class WordSearchReader
         }
     }
 
-    public static IEnumerable<string> GetAllLinesFromTopLeftToBottomRight(IReadOnlyList<string> lines)
+    private static IEnumerable<string> GetAllLinesFromTopLeftToBottomRight(IReadOnlyList<string> lines)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
@@ -54,7 +85,7 @@ static class WordSearchReader
         }
     }
 
-    public static IEnumerable<string> GetAllLinesFromBottomRightToTopLeft(IReadOnlyList<string> lines)
+    private static IEnumerable<string> GetAllLinesFromBottomRightToTopLeft(IReadOnlyList<string> lines)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
@@ -72,7 +103,7 @@ static class WordSearchReader
         }
     }
 
-    public static IEnumerable<string> GetAllLinesFromBottomLeftToTopRight(IReadOnlyList<string> lines)
+    private static IEnumerable<string> GetAllLinesFromBottomLeftToTopRight(IReadOnlyList<string> lines)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
@@ -90,7 +121,7 @@ static class WordSearchReader
         }
     }
 
-    public static IEnumerable<string> GetAllLinesFromTopRightToBottomLeft(IReadOnlyList<string> lines)
+    private static IEnumerable<string> GetAllLinesFromTopRightToBottomLeft(IReadOnlyList<string> lines)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
@@ -108,19 +139,19 @@ static class WordSearchReader
         }
     }
 
-    public static string GetLineFromLeftToRight(IReadOnlyList<string> lines, int row) =>
+    private static string GetLineFromLeftToRight(IReadOnlyList<string> lines, int row) =>
         lines[row];
 
-    public static string GetLineFromRightToLeft(IReadOnlyList<string> lines, int row) =>
+    private static string GetLineFromRightToLeft(IReadOnlyList<string> lines, int row) =>
         new(lines[row].Reverse().ToArray());
 
-    public static string GetLineFromTopToBottom(IReadOnlyList<string> lines, int column) =>
+    private static string GetLineFromTopToBottom(IReadOnlyList<string> lines, int column) =>
         string.Join(null, lines.Select(l => l.ElementAt(column)));
 
-    public static string GetLineFromBottomToTop(IReadOnlyList<string> lines, int column) =>
+    private static string GetLineFromBottomToTop(IReadOnlyList<string> lines, int column) =>
         string.Join(null, lines.Select(l => l.ElementAt(column)).Reverse());
 
-    public static string GetLineFromTopLeftToBottomRight(IReadOnlyList<string> lines, Coordinates coordinates)
+    private static string GetLineFromTopLeftToBottomRight(IReadOnlyList<string> lines, Coordinates coordinates)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
@@ -147,7 +178,7 @@ static class WordSearchReader
         return stringBuilder.ToString();
     }
 
-    public static string GetLineFromBottomRightToTopLeft(IReadOnlyList<string> lines, Coordinates coordinates)
+    private static string GetLineFromBottomRightToTopLeft(IReadOnlyList<string> lines, Coordinates coordinates)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
@@ -173,7 +204,7 @@ static class WordSearchReader
         return stringBuilder.ToString();
     }
 
-    public static string GetLineFromBottomLeftToTopRight(IReadOnlyList<string> lines, Coordinates coordinates)
+    private static string GetLineFromBottomLeftToTopRight(IReadOnlyList<string> lines, Coordinates coordinates)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
@@ -199,7 +230,7 @@ static class WordSearchReader
         return stringBuilder.ToString();
     }
 
-    public static string GetLineFromTopRightToBottomLeft(IReadOnlyList<string> lines, Coordinates coordinates)
+    private static string GetLineFromTopRightToBottomLeft(IReadOnlyList<string> lines, Coordinates coordinates)
     {
         int lastRowIndex = lines.Count - 1;
         int lastColumnIndex = lines[0].Length - 1;
