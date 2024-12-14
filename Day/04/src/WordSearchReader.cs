@@ -9,6 +9,60 @@ static class WordSearchReader
             .Select(CountOccurrencesOfXmas)
             .Sum();
 
+    public static int CountOccurrencesOfMasCross(IReadOnlyList<string> lines)
+    {
+        var lastRowIndex = lines.Count - 1;
+        var lastColumnIndex = lines[0].Length - 1;
+
+        var count = 0;
+        for (int row = 0; row <= lastRowIndex; row++)
+        {
+            for (int column = 0; column <= lastColumnIndex; column++)
+            {
+                if (IsXMasCenteredAtPosition(lines, (row, column)))
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private static bool IsXMasCenteredAtPosition(IReadOnlyList<string> lines, Coordinates coordinates)
+    {
+        int lastRowIndex = lines.Count - 1;
+        int lastColumnIndex = lines[0].Length - 1;
+
+        (int row, int column) = coordinates;
+
+        if (row == 0
+            || row == lastRowIndex
+            || column == 0
+            || column == lastColumnIndex)
+        {
+            return false;
+        }
+
+        if (GetCharAtPosition(lines, row, column) != 'A')
+        {
+            return false;
+        }
+
+        bool isMasFromTopLeftToBottomRight =
+            GetCharAtPosition(lines, row - 1, column - 1) == 'M' && GetCharAtPosition(lines, row + 1, column + 1) == 'S'
+            || GetCharAtPosition(lines, row - 1, column - 1) == 'S' && GetCharAtPosition(lines, row + 1, column + 1) == 'M';
+
+        bool isMasFromTopRightToBottomLeft =
+            GetCharAtPosition(lines, row - 1, column + 1) == 'M' && GetCharAtPosition(lines, row + 1, column - 1) == 'S'
+            || GetCharAtPosition(lines, row - 1, column + 1) == 'S' && GetCharAtPosition(lines, row + 1, column - 1) == 'M';
+
+        return isMasFromTopLeftToBottomRight && isMasFromTopRightToBottomLeft;
+    }
+
+    private static char GetCharAtPosition(IReadOnlyList<string> lines, int row, int column) =>
+        lines[row].ElementAt(column);
+
     private static int CountOccurrencesOfXmas(string line)
     {
         int count = 0;

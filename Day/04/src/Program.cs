@@ -19,6 +19,10 @@ catch (Exception ex)
 
 int xmasCount = WordSearchReader.CountOccurrencesOfXmas(lines);
 
-Console.WriteLine("Occurrences of XMAS found: " + xmasCount);
+Console.WriteLine("Occurrences of XMAS found : " + xmasCount);
+
+int xmasCrossCount = WordSearchReader.CountOccurrencesOfMasCross(lines);
+
+Console.WriteLine("Occurrences of X-MAS found: " + xmasCrossCount);
 
 return 0;
